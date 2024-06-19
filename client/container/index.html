@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Client</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+  <div id="title-bar">
+    <div id="title">Custom Title Bar</div>
+    <div id="title-bar-buttons">
+        <div id="minimize" class="button">-</div>
+        <div id="maximize" class="button">□</div>
+        <div id="close" class="button">×</div>
+    </div>
+  </div>
+  <app-root></app-root>
+  <script>
+    document.getElementById('minimize').addEventListener('click', () => {
+        window.cefQuery({ request: 'minimize' });
+    });
+
+    document.getElementById('maximize').addEventListener('click', () => {
+        window.cefQuery({ request: 'maximize' });
+    });
+
+    document.getElementById('close').addEventListener('click', () => {
+        window.cefQuery({ request: 'close' });
+    });
+</script>
+</body>
+</html>

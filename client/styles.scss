@@ -1,0 +1,33 @@
+* {
+    box-sizing: border-box;
+}
+
+body, html {
+    margin: 0;
+    width: 100%;
+}
+
+#title-bar {
+    height: 30px;
+    background-color: #007acc;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    user-select: none;
+    -webkit-app-region: drag; /* Enable dragging */
+}
+#title-bar-buttons {
+    display: flex;
+    gap: 10px;
+}
+.button {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    -webkit-app-region: no-drag; /* Prevent dragging on buttons */
+}

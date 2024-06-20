@@ -9,9 +9,9 @@
     ]
   },
   "files": [
-    "./client/client.ts",
-    "./client/labber.server.ts",
-    "./client/server.ts"
+    "./client.ts",
+    "./labber.server.ts",
+    "./server.ts"
   ],
   "include": [
     "src/**/*.d.ts"

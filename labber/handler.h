@@ -1,20 +1,17 @@
-#ifndef CEF_TESTS_CEFSIMPLE_SIMPLE_HANDLER_H_
-#define CEF_TESTS_CEFSIMPLE_SIMPLE_HANDLER_H_
-
 #include "include/cef_client.h"
 
 #include <list>
 
-class SimpleHandler : public CefClient,
+class LabberHandler : public CefClient,
                       public CefDisplayHandler,
                       public CefLifeSpanHandler,
                       public CefLoadHandler {
  public:
-  explicit SimpleHandler(bool use_views);
-  ~SimpleHandler();
+  explicit LabberHandler(bool use_views);
+  ~LabberHandler();
 
   // Provide access to the single global instance of this object.
-  static SimpleHandler* GetInstance();
+  static LabberHandler* GetInstance();
 
   // CefClient methods:
   virtual CefRefPtr<CefDisplayHandler> GetDisplayHandler() override {
@@ -64,7 +61,5 @@ class SimpleHandler : public CefClient,
   bool is_closing_;
 
   // Include the default reference counting implementation.
-  IMPLEMENT_REFCOUNTING(SimpleHandler);
+  IMPLEMENT_REFCOUNTING(LabberHandler);
 };
-
-#endif  // CEF_TESTS_CEFSIMPLE_SIMPLE_HANDLER_H_

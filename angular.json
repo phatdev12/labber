@@ -18,8 +18,8 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "dist/client",
-            "index": "client/container/index.html",
-            "browser": "client/client.ts",
+            "index": "container/index.html",
+            "browser": "client.ts",
             "polyfills": [
               "zone.js"
             ],
@@ -32,13 +32,13 @@
               }
             ],
             "styles": [
-              "client/styles.scss"
+              "styles.scss"
             ],
             "scripts": [],
-            "server": "client/labber.server.ts",
+            "server": "labber.server.ts",
             "prerender": true,
             "ssr": {
-              "entry": "client/server.ts"
+              "entry": "server.ts"
             }
           },
           "configurations": {
@@ -96,7 +96,7 @@
               }
             ],
             "styles": [
-              "client/styles.scss"
+              "styles.scss"
             ],
             "scripts": []
           }

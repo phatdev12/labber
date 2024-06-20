@@ -9,11 +9,13 @@
 #include "include/wrapper/cef_helpers.h"
 #include "handler.h"
 
+using namespace std;
+
 namespace {
 
-class SimpleWindowDelegate : public CefWindowDelegate {
+class MainWindow : public CefWindowDelegate {
  public:
-  explicit SimpleWindowDelegate(CefRefPtr<CefBrowserView> browser_view)
+  explicit MainWindow(CefRefPtr<CefBrowserView> browser_view)
       : browser_view_(browser_view) {}
 
   void OnWindowCreated(CefRefPtr<CefWindow> window) override {
@@ -42,75 +44,57 @@ class SimpleWindowDelegate : public CefWindowDelegate {
  private:
   CefRefPtr<CefBrowserView> browser_view_;
 
-  IMPLEMENT_REFCOUNTING(SimpleWindowDelegate);
-  DISALLOW_COPY_AND_ASSIGN(SimpleWindowDelegate);
+  IMPLEMENT_REFCOUNTING(MainWindow);
+  DISALLOW_COPY_AND_ASSIGN(MainWindow);
 };
 
-class SimpleBrowserViewDelegate : public CefBrowserViewDelegate {
+class MainBrowser : public CefBrowserViewDelegate {
  public:
-  SimpleBrowserViewDelegate() {}
+  MainBrowser() {}
 
   bool OnPopupBrowserViewCreated(CefRefPtr<CefBrowserView> browser_view,
                                  CefRefPtr<CefBrowserView> popup_browser_view,
                                  bool is_devtools) override {
     CefWindow::CreateTopLevelWindow(
-        new SimpleWindowDelegate(popup_browser_view));
+        new MainWindow(popup_browser_view));
     return true;
   }
 
  private:
-  IMPLEMENT_REFCOUNTING(SimpleBrowserViewDelegate);
-  DISALLOW_COPY_AND_ASSIGN(SimpleBrowserViewDelegate);
+  IMPLEMENT_REFCOUNTING(MainBrowser);
+  DISALLOW_COPY_AND_ASSIGN(MainBrowser);
 };
 
 }  // namespace
 
-SimpleApp::SimpleApp() {}
+App::App() {}
 
-void SimpleApp::OnContextInitialized() {
+void App::OnContextInitialized() {
   CEF_REQUIRE_UI_THREAD();
 
   CefRefPtr<CefCommandLine> command_line =
       CefCommandLine::GetGlobalCommandLine();
 
 
-  const bool use_views = command_line->HasSwitch("use-views");
 
-  CefRefPtr<SimpleHandler> handler(new SimpleHandler(use_views));
+  CefRefPtr<LabberHandler> handler(new LabberHandler(false));
 
   CefBrowserSettings browser_settings;
 
-  std::string url;
+  string url = "http://localhost:9000";
 
-  url = command_line->GetSwitchValue("url");
-  if (url.empty()) {
-    url = "http://localhost:9000";
-  }
+  CefWindowInfo window_info;
+  window_info.external_begin_frame_enabled = false;
+  window_info.windowless_rendering_enabled = false;
+  window_info.style &= ~WS_SIZEBOX;
+  
+  window_info.SetAsPopup(nullptr, "Labber");
 
-  if (use_views) {
-
-    CefRefPtr<CefBrowserView> browser_view = CefBrowserView::CreateBrowserView(
-        handler, url, browser_settings, nullptr, nullptr,
-        new SimpleBrowserViewDelegate());
-
-    CefWindow::CreateTopLevelWindow(new SimpleWindowDelegate(browser_view));
-  } else {
-    CefWindowInfo window_info;
-    window_info.external_begin_frame_enabled = false;
-    window_info.windowless_rendering_enabled = false;
-    window_info.style = WS_OVERLAPPEDWINDOW & ~(WS_CAPTION) & ~WS_SYSMENU;
-    window_info.ex_style = WS_EX_APPWINDOW;
-    
-#if defined(OS_WIN)
-    window_info.SetAsPopup(nullptr, "Labber");
-#endif
-
-    browser_settings.background_color = CefColorSetARGB(255, 0, 0, 0);
-    CefBrowserHost::CreateBrowser(window_info, handler, url, browser_settings,
-                                  nullptr, nullptr);
-  }
+  browser_settings.background_color = CefColorSetARGB(255, 0, 0, 0);
+  CefBrowserHost::CreateBrowser(window_info, handler, url, browser_settings,
+                                nullptr, nullptr);
 }
 
-CefRefPtr<CefClient> SimpleApp::GetDefaultClient() {
-  return SimpleHandler::GetInstance();
+CefRefPtr<CefClient> App::GetDefaultClient() {
+  return LabberHandler::GetInstance();
 }
